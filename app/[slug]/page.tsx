@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getPageBySlug } from "@/lib/content";
 import { SiteShell } from "@/components/site-shell";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{ slug: string }>;
 };

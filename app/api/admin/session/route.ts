@@ -4,7 +4,7 @@ import { clearAdminSession, isValidAdminCredentials, setAdminSession } from "@/l
 export async function POST(request: Request) {
   const body = (await request.json()) as { email?: string; password?: string };
 
-  if (!isValidAdminCredentials(body.email ?? "", body.password ?? "")) {
+  if (!(await isValidAdminCredentials(body.email ?? "", body.password ?? ""))) {
     return NextResponse.json({ message: "E-posta veya şifre hatalı." }, { status: 401 });
   }
 

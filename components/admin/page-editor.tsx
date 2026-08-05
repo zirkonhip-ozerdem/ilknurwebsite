@@ -22,6 +22,24 @@ const sectionTypes = [
   "cta"
 ];
 
+const sectionTypeLabels: Record<string, string> = {
+  hero: "Banner / Hero",
+  stats: "Güven Göstergeleri",
+  manifesto: "Manifesto",
+  cards: "Kart Listesi",
+  feature: "Öne Çıkan Alan",
+  articles: "Yazı Kartları",
+  testimonials: "Yorumlar",
+  timeline: "Zaman Akışı",
+  quote: "Alıntı",
+  faq: "SSS",
+  events: "Etkinlikler",
+  press: "Basın Kiti",
+  newsletter: "Bülten",
+  contact: "İletişim",
+  cta: "CTA"
+};
+
 function createSection(sortOrder: number): SiteSection {
   return {
     type: "cards",
@@ -46,7 +64,13 @@ function createItem(): SectionItem {
   };
 }
 
-export function PageEditor({ initialPage }: { initialPage: SitePage }) {
+type PageEditorProps = {
+  initialPage: SitePage;
+  moduleLabel?: string;
+  moduleDescription?: string;
+};
+
+export function PageEditor({ initialPage, moduleLabel, moduleDescription }: PageEditorProps) {
   const [page, setPage] = useState<SitePage>(initialPage);
   const [activeIndex, setActiveIndex] = useState(0);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
@@ -144,19 +168,20 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
 
   return (
     <main className="admin-editor">
-      <header className="admin-header">
+      <header className="admin-title-block with-actions">
         <div>
           <Link className="admin-back" href="/admin">
-            ← Sayfalara dön
+            Dashboard&apos;a dön
           </Link>
-          <h1>{page.title}</h1>
-          <p>Sayfa bilgileri, SEO alanları, bölüm metinleri ve tekrar eden kart öğeleri.</p>
+          <span>İçerik Yönetimi</span>
+          <h1>{moduleLabel ?? page.title}</h1>
+          <p>{moduleDescription ?? "Sayfa bilgileri, SEO alanları, bölüm metinleri ve tekrar eden kart öğeleri."}</p>
         </div>
-        <div className="admin-actions">
-          <Link className="button button-light" href={publicHref}>
+        <div className="admin-page-actions">
+          <Link className="admin-secondary-button" href={publicHref}>
             Önizle
           </Link>
-          <button className="button button-dark" type="button" onClick={save} disabled={status === "saving"}>
+          <button className="admin-primary-button" type="button" onClick={save} disabled={status === "saving"}>
             {status === "saving" ? "Kaydediliyor" : "Kaydet"}
           </button>
         </div>
@@ -164,9 +189,14 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
       {status === "saved" && <div className="admin-success">Sayfa kaydedildi.</div>}
       {status === "error" && <div className="admin-warning">Kaydedilemedi. Veritabanı bağlantısını ve oturumu kontrol edin.</div>}
       <section className="admin-editor-grid">
-        <aside className="admin-card admin-sidebar">
-          <h2>Bölümler</h2>
-          <button className="button button-dark" type="button" onClick={addSection}>
+        <aside className="admin-panel admin-editor-sidebar">
+          <div className="admin-section-heading compact-heading">
+            <div>
+              <span>Sayfa Akışı</span>
+              <h2>Bölümler</h2>
+            </div>
+          </div>
+          <button className="admin-primary-button full" type="button" onClick={addSection}>
             Bölüm Ekle
           </button>
           <div className="section-tabs">
@@ -178,13 +208,19 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
                 onClick={() => setActiveIndex(index)}
               >
                 <span>{index + 1}</span>
-                {section.title}
+                <strong>{section.title}</strong>
+                <small>{sectionTypeLabels[section.type] ?? section.type}</small>
               </button>
             ))}
           </div>
         </aside>
-        <div className="admin-card admin-form">
-          <h2>Sayfa Ayarları</h2>
+        <div className="admin-panel admin-form">
+          <div className="admin-section-heading compact-heading">
+            <div>
+              <span>Sayfa & SEO</span>
+              <h2>Genel Bilgiler</h2>
+            </div>
+          </div>
           <div className="admin-two-col">
             <label>
               Başlık
@@ -222,10 +258,15 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
           </label>
         </div>
         {activeSection && (
-          <section className="admin-card admin-form admin-section-editor">
+          <section className="admin-panel admin-form admin-section-editor">
             <div className="section-editor-head">
-              <h2>Aktif Bölüm</h2>
-              <div>
+              <div className="admin-section-heading compact-heading">
+                <div>
+                  <span>{sectionTypeLabels[activeSection.type] ?? activeSection.type}</span>
+                  <h2>Aktif Bölüm</h2>
+                </div>
+              </div>
+              <div className="admin-mini-actions">
                 <button type="button" onClick={() => moveSection(activeIndex, -1)}>
                   Yukarı
                 </button>
@@ -243,7 +284,7 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
                 <select value={activeSection.type} onChange={(event) => updateSection(activeIndex, { type: event.target.value })}>
                   {sectionTypes.map((type) => (
                     <option key={type} value={type}>
-                      {type}
+                      {sectionTypeLabels[type] ?? type}
                     </option>
                   ))}
                 </select>
@@ -280,8 +321,14 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
             </div>
             <div className="items-editor">
               <div className="section-editor-head">
-                <h3>Tekrar Eden Öğeler</h3>
+                <div className="admin-section-heading compact-heading">
+                  <div>
+                    <span>Kart / Liste İçeriği</span>
+                    <h3>Tekrar Eden Öğeler</h3>
+                  </div>
+                </div>
                 <button
+                  className="admin-secondary-button"
                   type="button"
                   onClick={() => updateSection(activeIndex, { items: [...(activeSection.items ?? []), createItem()] })}
                 >
@@ -300,7 +347,7 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
                   </label>
                   <div className="admin-two-col">
                     <label>
-                      Meta
+                      Meta / Tarih / Kategori
                       <input value={item.meta ?? ""} onChange={(event) => updateItem(activeIndex, itemIndex, { meta: event.target.value })} />
                     </label>
                     <label>
@@ -308,7 +355,22 @@ export function PageEditor({ initialPage }: { initialPage: SitePage }) {
                       <input value={item.href ?? ""} onChange={(event) => updateItem(activeIndex, itemIndex, { href: event.target.value })} />
                     </label>
                   </div>
+                  <div className="admin-two-col">
+                    <label>
+                      Görsel URL
+                      <input value={item.image ?? ""} onChange={(event) => updateItem(activeIndex, itemIndex, { image: event.target.value })} />
+                    </label>
+                    <label>
+                      SEO Etiketi
+                      <input
+                        value={item.label ?? ""}
+                        onChange={(event) => updateItem(activeIndex, itemIndex, { label: event.target.value })}
+                        placeholder="Örn: liderlik, koçluk, nefes"
+                      />
+                    </label>
+                  </div>
                   <button
+                    className="admin-danger-button"
                     type="button"
                     onClick={() =>
                       updateSection(activeIndex, {

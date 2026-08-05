@@ -1,6 +1,8 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { verifyPassword } from "@/lib/password";
 
 const cookieName = "ilknur_admin_session";
 const maxAge = 60 * 60 * 8;
@@ -64,7 +66,18 @@ export async function clearAdminSession() {
   store.delete(cookieName);
 }
 
-export function isValidAdminCredentials(email: string, password: string) {
+export async function isValidAdminCredentials(email: string, password: string) {
+  if (process.env.DATABASE_URL) {
+    try {
+      const admin = await prisma.adminCredential.findUnique({ where: { email } });
+      if (admin) {
+        return verifyPassword(password, admin.passwordHash);
+      }
+    } catch {
+      // Fall through to environment credentials.
+    }
+  }
+
   const expectedEmail = process.env.ADMIN_EMAIL ?? "admin@ilknursoydan.com";
   const expectedPassword = process.env.ADMIN_PASSWORD ?? "admin";
   return email === expectedEmail && password === expectedPassword;
