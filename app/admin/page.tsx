@@ -1,5 +1,15 @@
 import Link from "next/link";
-import { BookOpenText, BriefcaseBusiness, Building2, Contact, FileText, ScrollText, Settings, UserRound } from "lucide-react";
+import {
+  BookOpenText,
+  BriefcaseBusiness,
+  Building2,
+  Contact,
+  FileText,
+  MessageSquareText,
+  ScrollText,
+  Settings,
+  UserRound
+} from "lucide-react";
 import { requireAdmin } from "@/lib/auth";
 import { getAdminPages } from "@/lib/content";
 
@@ -15,6 +25,12 @@ const modules = [
     title: "İletişim Bilgileri",
     text: "Footer ve iletişim alanlarında kullanılan e-posta, telefon ve adres bilgileri.",
     icon: Contact
+  },
+  {
+    href: "/admin/messages",
+    title: "Form Mesajları",
+    text: "İletişim formundan gelen başvuru ve talepleri görüntüleyin.",
+    icon: MessageSquareText
   },
   {
     href: "/admin/about",

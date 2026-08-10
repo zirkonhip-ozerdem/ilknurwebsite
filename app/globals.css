@@ -1660,6 +1660,72 @@ textarea {
   color: #111827;
 }
 
+.admin-message-list {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-message-card {
+  display: grid;
+  gap: 16px;
+  border-radius: 8px;
+  padding: 22px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+}
+
+.admin-message-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.admin-message-head div {
+  display: grid;
+  gap: 5px;
+}
+
+.admin-message-head span {
+  color: #0f6268;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.admin-message-head h2 {
+  color: #111827;
+  font-family: var(--font-sans), Arial, sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.admin-message-head time {
+  flex: 0 0 auto;
+  color: #64748b;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.admin-message-card p {
+  color: #334155;
+  white-space: pre-wrap;
+}
+
+.admin-message-card a {
+  display: inline-flex;
+  width: max-content;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #00383b;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  font-weight: 800;
+}
+
 .admin-row div,
 .admin-list-row div {
   display: grid;
