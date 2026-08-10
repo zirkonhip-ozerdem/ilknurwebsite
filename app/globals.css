@@ -904,6 +904,30 @@ textarea {
   color: var(--deep);
 }
 
+.footer-socials {
+  display: flex;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.footer-socials a {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  color: var(--deep);
+  background: rgba(255, 255, 255, 0.45);
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.footer-socials a:hover {
+  transform: translateY(-2px);
+  border-color: var(--deep);
+  background: var(--white);
+}
+
 .footer-logo-wrap {
   display: grid;
   justify-items: center;

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { getContactSettings, getGeneralSettings } from "@/lib/settings";
 
 export async function SiteFooter() {
@@ -22,6 +22,20 @@ export async function SiteFooter() {
             <MapPin size={17} />
             {contactSettings.address}
           </span>
+          {(generalSettings.linkedin || generalSettings.instagram) && (
+            <div className="footer-socials" aria-label="Sosyal medya bağlantıları">
+              {generalSettings.linkedin && (
+                <a href={generalSettings.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <Linkedin size={18} />
+                </a>
+              )}
+              {generalSettings.instagram && (
+                <a href={generalSettings.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <Instagram size={18} />
+                </a>
+              )}
+            </div>
+          )}
         </address>
         <div className="footer-logo-wrap">
           <Link href="/" className="brand-logo footer-logo" aria-label="İlknur Erdal Soydan anasayfa">

@@ -14,6 +14,7 @@ import {
   Users
 } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
+import { getContactSettings } from "@/lib/settings";
 import type { SectionItem, SiteSection } from "@/lib/types";
 
 const icons = {
@@ -319,7 +320,9 @@ function NewsletterSection({ section }: { section: SiteSection }) {
   );
 }
 
-function ContactSection({ section }: { section: SiteSection }) {
+async function ContactSection({ section }: { section: SiteSection }) {
+  const contactSettings = await getContactSettings();
+
   return (
     <section className="contact-section">
       <div className="contact-intro">
@@ -336,7 +339,7 @@ function ContactSection({ section }: { section: SiteSection }) {
             <Mail size={18} />
             <div>
               <span>E-posta</span>
-              <strong>info@ilknursoydan.com</strong>
+              <strong>{contactSettings.email}</strong>
             </div>
           </div>
           <div className="studio-box">
@@ -383,8 +386,8 @@ function LegalSection({ section }: { section: SiteSection }) {
   );
 }
 
-export function SectionRenderer({ section }: { section: SiteSection; pageSlug: string }) {
-  const renderers: Record<string, (section: SiteSection) => React.ReactNode> = {
+export async function SectionRenderer({ section }: { section: SiteSection; pageSlug: string }) {
+  const renderers: Record<string, (section: SiteSection) => React.ReactNode | Promise<React.ReactNode>> = {
     hero: (current) => <HeroSection section={current} />,
     stats: (current) => <StatsSection section={current} />,
     manifesto: (current) => <ManifestoSection section={current} />,
@@ -403,5 +406,5 @@ export function SectionRenderer({ section }: { section: SiteSection; pageSlug: s
     cta: (current) => <CtaSection section={current} />
   };
 
-  return renderers[section.type]?.(section) ?? <CardsSection section={section} />;
+  return (await renderers[section.type]?.(section)) ?? <CardsSection section={section} />;
 }
