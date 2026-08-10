@@ -373,6 +373,88 @@ export const defaultPages: SitePage[] = [
         ]
       }
     ]
+  },
+  {
+    slug: "kvkk-aydinlatma-metni",
+    title: "KVKK Aydınlatma Metni",
+    description: "Kişisel verilerin işlenmesine ilişkin demo aydınlatma metni.",
+    seoTitle: "KVKK Aydınlatma Metni | İlknur Erdal Soydan",
+    seoDescription: "İlknur Erdal Soydan web sitesi için kişisel verilerin korunması hakkında demo aydınlatma metni.",
+    status: "PUBLISHED",
+    sortOrder: 7,
+    sections: [
+      {
+        type: "legal",
+        eyebrow: "Yasal Bilgilendirme",
+        title: "KVKK Aydınlatma Metni",
+        subtitle: "Bu sayfadaki içerik demo amaçlıdır. Yayın öncesinde hukuki danışmanlıkla güncellenmelidir.",
+        body: "İlknur Erdal Soydan web sitesi üzerinden paylaştığınız kişisel veriler, 6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında özenle işlenir ve korunur.",
+        sortOrder: 0,
+        items: [
+          {
+            title: "Veri Sorumlusu",
+            text: "Bu demo metin kapsamında veri sorumlusu İlknur Erdal Soydan olarak kabul edilmiştir. Resmi unvan, adres ve iletişim bilgileri yayın öncesinde güncellenmelidir."
+          },
+          {
+            title: "İşlenen Kişisel Veriler",
+            text: "İletişim formları aracılığıyla ad, soyad, e-posta adresi, telefon, konu ve mesaj içeriği gibi bilgiler işlenebilir."
+          },
+          {
+            title: "İşleme Amaçları",
+            text: "Kişisel verileriniz taleplerinizi yanıtlamak, randevu ve danışmanlık süreçlerini yürütmek, hizmet kalitesini geliştirmek ve yasal yükümlülükleri yerine getirmek amacıyla işlenir."
+          },
+          {
+            title: "Aktarım ve Saklama",
+            text: "Verileriniz yalnızca hizmetin gerektirdiği teknik altyapı sağlayıcıları ve yasal olarak yetkili kurumlarla paylaşılabilir. Saklama süreleri ilgili mevzuat ve işleme amacı doğrultusunda belirlenir."
+          },
+          {
+            title: "Haklarınız",
+            text: "KVKK'nın 11. maddesi kapsamında kişisel verilerinize ilişkin bilgi talep etme, düzeltme, silme, işleme itiraz etme ve kanunda belirtilen diğer haklara sahipsiniz."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    slug: "gizlilik-politikasi",
+    title: "Gizlilik Politikası",
+    description: "Web sitesi gizlilik uygulamalarına ilişkin demo politika metni.",
+    seoTitle: "Gizlilik Politikası | İlknur Erdal Soydan",
+    seoDescription: "İlknur Erdal Soydan web sitesi için demo gizlilik politikası.",
+    status: "PUBLISHED",
+    sortOrder: 8,
+    sections: [
+      {
+        type: "legal",
+        eyebrow: "Yasal Bilgilendirme",
+        title: "Gizlilik Politikası",
+        subtitle: "Bu sayfadaki içerik demo amaçlıdır. Yayın öncesinde hukuki danışmanlıkla güncellenmelidir.",
+        body: "Bu gizlilik politikası, web sitesini ziyaret eden kullanıcıların bilgilerinin hangi prensiplerle toplandığını, kullanıldığını ve korunduğunu açıklamak için hazırlanmış demo bir metindir.",
+        sortOrder: 0,
+        items: [
+          {
+            title: "Toplanan Bilgiler",
+            text: "Web sitesinde iletişim formu aracılığıyla paylaşılan bilgiler ve temel ziyaret istatistikleri işlenebilir."
+          },
+          {
+            title: "Bilgilerin Kullanımı",
+            text: "Paylaşılan bilgiler, kullanıcının talebini yanıtlamak, randevu ve iletişim süreçlerini yürütmek ve site deneyimini iyileştirmek amacıyla kullanılabilir."
+          },
+          {
+            title: "Çerezler",
+            text: "Web sitesi teknik gereklilikler, güvenlik ve deneyim iyileştirme amacıyla çerezlerden yararlanabilir. Detaylı çerez metni yayın öncesinde ayrıca düzenlenmelidir."
+          },
+          {
+            title: "Üçüncü Taraf Bağlantılar",
+            text: "Sitede yer alan üçüncü taraf bağlantılar kendi gizlilik uygulamalarına tabidir. Bu bağlantıların içerik ve politikalarından ilgili üçüncü taraflar sorumludur."
+          },
+          {
+            title: "Güncellemeler",
+            text: "Gizlilik politikası ihtiyaç halinde güncellenebilir. Güncel metin her zaman bu sayfada yayınlanır."
+          }
+        ]
+      }
+    ]
   }
 ];
 

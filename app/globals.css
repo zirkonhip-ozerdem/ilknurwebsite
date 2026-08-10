@@ -699,6 +699,60 @@ details p {
   padding-top: 90px;
 }
 
+.legal-section {
+  display: grid;
+  gap: 42px;
+  width: min(980px, calc(100% - 12vw));
+  margin: 0 auto;
+  padding: 82px 0 96px;
+}
+
+.legal-heading {
+  display: grid;
+  gap: 16px;
+  max-width: 760px;
+}
+
+.legal-heading h1 {
+  max-width: none;
+  font-size: clamp(2.7rem, 5vw, 5rem);
+}
+
+.legal-heading p {
+  font-size: 1.05rem;
+}
+
+.legal-content {
+  display: grid;
+  gap: 22px;
+  border-radius: 8px;
+  padding: clamp(26px, 4vw, 44px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.legal-content > p {
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+.legal-content article {
+  display: grid;
+  gap: 8px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.legal-content article:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.legal-content h2 {
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+}
+
 .contact-intro {
   display: grid;
   gap: 18px;
@@ -1560,6 +1614,26 @@ textarea {
 .admin-row:hover,
 .admin-list-row:hover {
   border-color: #0f6268;
+}
+
+.admin-empty-state {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  border-radius: 8px;
+  padding: 34px;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  text-align: center;
+}
+
+.admin-empty-state svg {
+  color: #0f6268;
+}
+
+.admin-empty-state strong {
+  color: #111827;
 }
 
 .admin-row div,

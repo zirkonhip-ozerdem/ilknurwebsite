@@ -22,17 +22,14 @@ const defaultGeneralSettings = {
 
 async function main() {
   for (const defaultPage of defaultPages) {
-    const page = await prisma.page.upsert({
-      where: { slug: defaultPage.slug },
-      update: {
-        title: defaultPage.title,
-        description: defaultPage.description,
-        seoTitle: defaultPage.seoTitle,
-        seoDescription: defaultPage.seoDescription,
-        status: defaultPage.status as PageStatus,
-        sortOrder: defaultPage.sortOrder
-      },
-      create: {
+    const existingPage = await prisma.page.findUnique({ where: { slug: defaultPage.slug } });
+
+    if (existingPage) {
+      continue;
+    }
+
+    const page = await prisma.page.create({
+      data: {
         slug: defaultPage.slug,
         title: defaultPage.title,
         description: defaultPage.description,
@@ -42,8 +39,6 @@ async function main() {
         sortOrder: defaultPage.sortOrder
       }
     });
-
-    await prisma.section.deleteMany({ where: { pageId: page.id } });
 
     await prisma.section.createMany({
       data: defaultPage.sections.map((section, index) => ({

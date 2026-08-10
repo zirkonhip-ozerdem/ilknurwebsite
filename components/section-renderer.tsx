@@ -362,6 +362,27 @@ function CtaSection({ section }: { section: SiteSection }) {
   );
 }
 
+function LegalSection({ section }: { section: SiteSection }) {
+  return (
+    <section className="legal-section">
+      <div className="legal-heading">
+        {section.eyebrow && <span className="eyebrow">{section.eyebrow}</span>}
+        <h1>{section.title}</h1>
+        {section.subtitle && <p>{section.subtitle}</p>}
+      </div>
+      <div className="legal-content">
+        {section.body && <p>{section.body}</p>}
+        {section.items?.map((item) => (
+          <article key={item.title}>
+            <h2>{item.title}</h2>
+            {item.text && <p>{item.text}</p>}
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function SectionRenderer({ section }: { section: SiteSection; pageSlug: string }) {
   const renderers: Record<string, (section: SiteSection) => React.ReactNode> = {
     hero: (current) => <HeroSection section={current} />,
@@ -378,6 +399,7 @@ export function SectionRenderer({ section }: { section: SiteSection; pageSlug: s
     press: (current) => <PressSection section={current} />,
     newsletter: (current) => <NewsletterSection section={current} />,
     contact: (current) => <ContactSection section={current} />,
+    legal: (current) => <LegalSection section={current} />,
     cta: (current) => <CtaSection section={current} />
   };
 

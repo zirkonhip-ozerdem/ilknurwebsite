@@ -14,6 +14,7 @@ import {
   KeyRound,
   LayoutDashboard,
   Menu,
+  ScrollText,
   Settings,
   UserRound,
   X
@@ -28,6 +29,7 @@ const navigation = [
   { href: "/admin/work-areas", label: "Çalışma Alanları", icon: BriefcaseBusiness },
   { href: "/admin/blog", label: "Yazılar / Blog", icon: BookOpenText },
   { href: "/admin/medivisis", label: "Medivisis", icon: Building2 },
+  { href: "/admin/legal", label: "Yasal Sayfalar", icon: ScrollText },
   { href: "/admin/profile", label: "Admin Bilgileri", icon: KeyRound },
   { href: "/", label: "Siteyi Gör", icon: Home }
 ];

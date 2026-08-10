@@ -29,9 +29,9 @@ export async function SiteFooter() {
           </Link>
         </div>
         <nav className="footer-links" aria-label="Footer bağlantıları">
-          <a href="https://www.koclukmerkezi.com/kvkk/">KVKK Aydınlatma Metni</a>
-          <a href="https://www.koclukmerkezi.com/kvkk/">Gizlilik Politikası</a>
-          <a href="https://www.koclukmerkezi.com/iletisim/">İletişim</a>
+          <Link href="/kvkk-aydinlatma-metni">KVKK Aydınlatma Metni</Link>
+          <Link href="/gizlilik-politikasi">Gizlilik Politikası</Link>
+          <Link href="/iletisim">İletişim</Link>
         </nav>
       </div>
       <div className="footer-bottom">

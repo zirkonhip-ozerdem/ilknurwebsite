@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpenText, BriefcaseBusiness, Building2, Contact, FileText, Settings, UserRound } from "lucide-react";
+import { BookOpenText, BriefcaseBusiness, Building2, Contact, FileText, ScrollText, Settings, UserRound } from "lucide-react";
 import { requireAdmin } from "@/lib/auth";
 import { getAdminPages } from "@/lib/content";
 
@@ -39,6 +39,12 @@ const modules = [
     title: "Medivisis",
     text: "Kurucu perspektifi, vizyon, kurum yönlendirmesi ve Medivisis sayfası.",
     icon: Building2
+  },
+  {
+    href: "/admin/legal",
+    title: "Yasal Sayfalar",
+    text: "KVKK aydınlatma metni ve gizlilik politikası içerikleri.",
+    icon: ScrollText
   }
 ];
 

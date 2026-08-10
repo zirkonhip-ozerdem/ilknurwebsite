@@ -19,6 +19,7 @@ const sectionTypes = [
   "press",
   "newsletter",
   "contact",
+  "legal",
   "cta"
 ];
 
@@ -37,6 +38,7 @@ const sectionTypeLabels: Record<string, string> = {
   press: "Basın Kiti",
   newsletter: "Bülten",
   contact: "İletişim",
+  legal: "Yasal Metin",
   cta: "CTA"
 };
 
