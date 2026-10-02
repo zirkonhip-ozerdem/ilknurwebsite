@@ -6,7 +6,7 @@ import { getAdminPages } from "@/lib/content";
 export default async function AdminWorkAreasPage() {
   await requireAdmin();
   const pages = await getAdminPages();
-  const page = pages.find((item) => item.slug === "calisma-alanlari");
+  const page = pages.find((item) => item.slug === "kamplar") ?? pages.find((item) => item.slug === "calisma-alanlari");
 
   if (!page) {
     notFound();
@@ -15,8 +15,8 @@ export default async function AdminWorkAreasPage() {
   return (
     <PageEditor
       initialPage={page}
-      moduleLabel="Çalışma Alanları Yönetimi"
-      moduleDescription="Hizmet kartları, SSS içerikleri, CTA metinleri ve sayfa SEO alanlarını buradan yönetin."
+      moduleLabel="Kamplar Yönetimi"
+      moduleDescription="Kamp, eğitim, SSS, CTA metinleri ve sayfa SEO alanlarını buradan yönetin."
     />
   );
 }

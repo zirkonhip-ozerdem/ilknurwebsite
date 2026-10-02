@@ -1,6 +1,7 @@
 import { config } from "dotenv";
 import { PrismaClient, PageStatus, Prisma } from "@prisma/client";
 import { hashPassword } from "../lib/password";
+import { defaultBlogPosts } from "../lib/blog";
 import { defaultPages } from "../lib/default-content";
 
 config({ path: ".env" });
@@ -75,6 +76,25 @@ async function main() {
       value: defaultGeneralSettings as Prisma.InputJsonValue
     }
   });
+
+  for (const post of defaultBlogPosts) {
+    await prisma.blogPost.upsert({
+      where: { slug: post.slug },
+      update: {},
+      create: {
+        slug: post.slug,
+        title: post.title,
+        excerpt: post.excerpt,
+        content: post.content,
+        category: post.category,
+        image: post.image,
+        seoTitle: post.seoTitle,
+        seoDescription: post.seoDescription,
+        status: post.status as PageStatus,
+        publishedAt: post.publishedAt
+      }
+    });
+  }
 
   const existingAdmin = await prisma.adminCredential.findFirst();
 

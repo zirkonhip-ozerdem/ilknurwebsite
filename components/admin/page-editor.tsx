@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { ImageUploadField } from "@/components/admin/image-upload-field";
 import type { SectionItem, SitePage, SiteSection } from "@/lib/types";
 
 const sectionTypes = [
   "hero",
   "stats",
+  "narrative",
   "manifesto",
   "cards",
   "feature",
@@ -26,6 +28,7 @@ const sectionTypes = [
 const sectionTypeLabels: Record<string, string> = {
   hero: "Banner / Hero",
   stats: "Güven Göstergeleri",
+  narrative: "Orta Metin Alanı",
   manifesto: "Manifesto",
   cards: "Kart Listesi",
   feature: "Öne Çıkan Alan",
@@ -311,6 +314,11 @@ export function PageEditor({ initialPage, moduleLabel, moduleDescription }: Page
               Metin
               <textarea value={activeSection.body ?? ""} onChange={(event) => updateSection(activeIndex, { body: event.target.value })} rows={4} />
             </label>
+            <ImageUploadField
+              label="Bölüm / Banner Görseli"
+              value={activeSection.mediaUrl ?? ""}
+              onChange={(value) => updateSection(activeIndex, { mediaUrl: value })}
+            />
             <div className="admin-two-col">
               <label>
                 CTA Metni
@@ -358,10 +366,12 @@ export function PageEditor({ initialPage, moduleLabel, moduleDescription }: Page
                     </label>
                   </div>
                   <div className="admin-two-col">
-                    <label>
-                      Görsel URL
-                      <input value={item.image ?? ""} onChange={(event) => updateItem(activeIndex, itemIndex, { image: event.target.value })} />
-                    </label>
+                    <ImageUploadField
+                      label="Öğe Görseli"
+                      value={item.image ?? ""}
+                      onChange={(value) => updateItem(activeIndex, itemIndex, { image: value })}
+                      hint="Önerilen kart görseli: 1200x800 px. Maksimum 8 MB. Sistem WebP’ye çevirir."
+                    />
                     <label>
                       SEO Etiketi
                       <input

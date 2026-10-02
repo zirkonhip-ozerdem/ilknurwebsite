@@ -5,6 +5,7 @@ import {
   Building2,
   Contact,
   FileText,
+  Images,
   MessageSquareText,
   ScrollText,
   Settings,
@@ -33,6 +34,12 @@ const modules = [
     icon: MessageSquareText
   },
   {
+    href: "/admin/sliders",
+    title: "Slider Yönetimi",
+    text: "Anasayfa ve iç sayfa banner görsellerini dosya yükleyerek yönetin.",
+    icon: Images
+  },
+  {
     href: "/admin/about",
     title: "Hakkımda Yönetimi",
     text: "İlknur Kimdir sayfasının hikaye, değerler, timeline ve SEO içerikleri.",
@@ -40,8 +47,8 @@ const modules = [
   },
   {
     href: "/admin/work-areas",
-    title: "Çalışma Alanları",
-    text: "Executive coaching, mentor coaching, nefes, kurumsal eğitim ve konuşmacı alanları.",
+    title: "Kamplar",
+    text: "Nefes, koçluk ve dönüşüm odağındaki kamp ve eğitim içerikleri.",
     icon: BriefcaseBusiness
   },
   {

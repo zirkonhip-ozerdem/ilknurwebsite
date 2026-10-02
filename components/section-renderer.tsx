@@ -14,8 +14,9 @@ import {
   Users
 } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
+import { getPublishedBlogPosts } from "@/lib/blog";
 import { getContactSettings } from "@/lib/settings";
-import type { SectionItem, SiteSection } from "@/lib/types";
+import type { SiteSection } from "@/lib/types";
 
 const icons = {
   BadgeCheck,
@@ -51,11 +52,11 @@ function SmartLink({ href, children, className }: { href?: string | null; childr
   );
 }
 
-function PortraitFrame() {
+function PortraitFrame({ src = "/assets/img/hero-banner-generated-v2.png" }: { src?: string | null }) {
   return (
     <div className="portrait-frame" aria-label="İlknur Erdal Soydan görsel alanı">
       <Image
-        src="/assets/img/hero-banner-generated-v2.png"
+        src={src || "/assets/img/hero-banner-generated-v2.png"}
         alt="İlknur Erdal Soydan"
         fill
         priority
@@ -83,13 +84,17 @@ function HeroTitle({ title }: { title: string }) {
 }
 
 function HeroSection({ section }: { section: SiteSection }) {
+  const paragraphs = section.body?.split("\n\n").filter(Boolean) ?? [];
+
   return (
     <section className="hero-section">
       <div className="hero-copy">
         {section.eyebrow && <span className="eyebrow">{section.eyebrow}</span>}
         <HeroTitle title={section.title} />
         {section.subtitle && <p className="hero-subtitle">{section.subtitle}</p>}
-        {section.body && <p>{section.body}</p>}
+        {paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
         <div className="button-row">
           <SmartLink className="button button-dark" href={section.ctaHref}>
             {section.ctaLabel}
@@ -101,7 +106,7 @@ function HeroSection({ section }: { section: SiteSection }) {
           ))}
         </div>
       </div>
-      <PortraitFrame />
+      <PortraitFrame src={section.mediaUrl} />
     </section>
   );
 }
@@ -123,8 +128,10 @@ function StatsSection({ section }: { section: SiteSection }) {
 }
 
 function CardsSection({ section }: { section: SiteSection }) {
+  const sectionId = section.eyebrow === "Hizmetler" ? "hizmetler" : section.eyebrow === "Yaklaşan Kamplar" ? "kamplar" : undefined;
+
   return (
-    <section className="section-container" id={section.eyebrow === "Hizmetler" ? "hizmetler" : undefined}>
+    <section className="section-container" id={sectionId}>
       <div className="heading-with-action">
         <SectionHeading section={section} />
         <SmartLink href={section.ctaHref} className="text-link">
@@ -144,6 +151,29 @@ function CardsSection({ section }: { section: SiteSection }) {
   );
 }
 
+function NarrativeSection({ section }: { section: SiteSection }) {
+  return (
+    <section className="narrative-section">
+      {section.eyebrow && <span className="eyebrow">{section.eyebrow}</span>}
+      <h2>{section.title}</h2>
+      {section.body && <p>{section.body}</p>}
+      <div className="narrative-copy">
+        {section.items?.map((item) =>
+          item.meta === "quote" ? (
+            <blockquote key={item.title}>“{item.title}”</blockquote>
+          ) : (
+            <p key={item.title}>
+              {item.title === "Koçluk" ? <strong>{item.title}</strong> : null}
+              {item.title === "Koçluk" ? " " : null}
+              {item.text}
+            </p>
+          )
+        )}
+      </div>
+    </section>
+  );
+}
+
 function ManifestoSection({ section }: { section: SiteSection }) {
   return (
     <section className="manifesto-section">
@@ -156,13 +186,19 @@ function ManifestoSection({ section }: { section: SiteSection }) {
 }
 
 function FeatureSection({ section }: { section: SiteSection }) {
+  const paragraphs = section.body?.split("\n\n").filter(Boolean) ?? [];
+
   return (
     <section className="feature-band" id={section.eyebrow === "Neden Medivisis?" ? "neden" : undefined}>
-      <div className="feature-media" />
+      <div className="feature-media">
+        {section.mediaUrl && <Image src={section.mediaUrl} alt={section.title} fill sizes="(max-width: 980px) 100vw, 42vw" />}
+      </div>
       <div className="feature-copy">
         {section.eyebrow && <span className="eyebrow">{section.eyebrow}</span>}
         <h2>{section.title}</h2>
-        {section.body && <p>{section.body}</p>}
+        {paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
         <SmartLink href={section.ctaHref} className="button button-light">
           {section.ctaLabel} <ArrowRight size={16} />
         </SmartLink>
@@ -182,18 +218,32 @@ function FeatureSection({ section }: { section: SiteSection }) {
   );
 }
 
-function ArticlesSection({ section }: { section: SiteSection }) {
+async function ArticlesSection({ section }: { section: SiteSection }) {
+  const posts = await getPublishedBlogPosts(6);
+  const articleItems =
+    posts.length > 0
+      ? posts.map((post) => ({
+          title: post.title,
+          text: post.excerpt,
+          meta: post.category,
+          image: post.image,
+          href: `/yazilar/${post.slug}`
+        }))
+      : section.items ?? [];
+
   return (
     <section className="section-container" id="yazilar">
       <SectionHeading section={section} />
       <div className="article-grid">
-        {section.items?.map((item, index) => (
+        {articleItems.map((item, index) => (
           <article className="article-card" key={item.title}>
-            <div className={`article-image article-image-${index + 1}`} />
+            <div className={`article-image article-image-${(index % 3) + 1}`}>
+              {item.image && <Image src={item.image} alt={item.title} fill sizes="(max-width: 760px) 100vw, 30vw" />}
+            </div>
             {item.meta && <span>{item.meta}</span>}
             <h3>{item.title}</h3>
             {item.text && <p>{item.text}</p>}
-            <Link href="/yazilar">Okumaya Devam Et</Link>
+            <Link href={item.href ?? "/yazilar"}>Okumaya Devam Et</Link>
           </article>
         ))}
       </div>
@@ -342,11 +392,6 @@ async function ContactSection({ section }: { section: SiteSection }) {
               <strong>{contactSettings.email}</strong>
             </div>
           </div>
-          <div className="studio-box">
-            <h3>Medivisis Stüdyo</h3>
-            <p>Projelerinizi ve stratejik toplantılarınızı Medivisis bünyesindeki inovasyon merkezimizde gerçekleştirin.</p>
-            <Link href="/medivisis">Medivisis&apos;i Keşfedin <ArrowRight size={14} /></Link>
-          </div>
         </aside>
       </div>
     </section>
@@ -358,9 +403,16 @@ function CtaSection({ section }: { section: SiteSection }) {
     <section className="cta-section">
       <h2>{section.title}</h2>
       {section.body && <p>{section.body}</p>}
-      <SmartLink className="button button-light" href={section.ctaHref}>
-        {section.ctaLabel}
-      </SmartLink>
+      <div className="button-row">
+        <SmartLink className="button button-light" href={section.ctaHref}>
+          {section.ctaLabel}
+        </SmartLink>
+        {section.items?.map((item) => (
+          <SmartLink key={item.title} className="button button-light" href={item.href}>
+            {item.title}
+          </SmartLink>
+        ))}
+      </div>
     </section>
   );
 }
@@ -390,10 +442,11 @@ export async function SectionRenderer({ section }: { section: SiteSection; pageS
   const renderers: Record<string, (section: SiteSection) => React.ReactNode | Promise<React.ReactNode>> = {
     hero: (current) => <HeroSection section={current} />,
     stats: (current) => <StatsSection section={current} />,
+    narrative: (current) => <NarrativeSection section={current} />,
     manifesto: (current) => <ManifestoSection section={current} />,
     cards: (current) => <CardsSection section={current} />,
     feature: (current) => <FeatureSection section={current} />,
-    articles: (current) => <ArticlesSection section={current} />,
+    articles: (current) => ArticlesSection({ section: current }),
     testimonials: (current) => <TestimonialsSection section={current} />,
     timeline: (current) => <TimelineSection section={current} />,
     quote: (current) => <QuoteSection section={current} />,

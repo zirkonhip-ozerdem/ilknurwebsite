@@ -5,7 +5,9 @@ import type { SitePage } from "@/lib/types";
 
 export function SiteShell({ page }: { page: SitePage }) {
   const sections = page.sections.filter(
-    (section) => !(page.slug === "iletisim" && section.type === "cta" && section.title === "Birlikte dönüşüm yolculuğuna başlayalım.")
+    (section) =>
+      !(page.slug === "iletisim" && section.type === "cta" && section.title === "Birlikte dönüşüm yolculuğuna başlayalım.") &&
+      !(page.slug === "yazilar" && section.type === "hero")
   );
 
   return (

@@ -13,7 +13,8 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "content:sync-homepage": "tsx prisma/sync-homepage-revision.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
@@ -23,6 +24,7 @@
     "next": "^15.4.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "sharp": "^0.35.3",
     "zod": "^3.25.76"
   },
   "overrides": {

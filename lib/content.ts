@@ -62,7 +62,12 @@ export async function getPageBySlug(slug: string) {
       include: { sections: { orderBy: { sortOrder: "asc" } } }
     });
 
-    if (!page || page.status !== PageStatus.PUBLISHED) {
+    if (!page) {
+      const fallbackPage = findDefaultPage(normalizedSlug);
+      return fallbackPage?.status === "PUBLISHED" ? fallbackPage : null;
+    }
+
+    if (page.status !== PageStatus.PUBLISHED) {
       return null;
     }
 
@@ -80,13 +85,22 @@ export async function getAdminPages(): Promise<SitePage[]> {
     return defaultPages;
   }
 
-  const pages = await prisma.page.findMany({
-    orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-    include: { sections: { orderBy: { sortOrder: "asc" } } }
-  });
+  try {
+    const pages = await prisma.page.findMany({
+      orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+      include: { sections: { orderBy: { sortOrder: "asc" } } }
+    });
 
-  return pages.map((page) => ({
-    ...page,
-    sections: page.sections.map(normalizeSection)
-  }));
+    const normalizedPages = pages.map((page) => ({
+      ...page,
+      sections: page.sections.map(normalizeSection)
+    }));
+
+    const existingSlugs = new Set(normalizedPages.map((page) => page.slug));
+    const missingDefaults = defaultPages.filter((page) => !existingSlugs.has(page.slug));
+
+    return [...normalizedPages, ...missingDefaults].sort((a, b) => a.sortOrder - b.sortOrder || a.title.localeCompare(b.title, "tr"));
+  } catch {
+    return defaultPages;
+  }
 }

@@ -1,22 +1,26 @@
-import { notFound } from "next/navigation";
-import { PageEditor } from "@/components/admin/page-editor";
+import { BlogPostManager } from "@/components/admin/blog-post-manager";
 import { requireAdmin } from "@/lib/auth";
-import { getAdminPages } from "@/lib/content";
+import { getAdminBlogPosts } from "@/lib/blog";
 
 export default async function AdminBlogPage() {
   await requireAdmin();
-  const pages = await getAdminPages();
-  const page = pages.find((item) => item.slug === "yazilar");
-
-  if (!page) {
-    notFound();
-  }
+  const posts = await getAdminBlogPosts();
+  const serializablePosts = posts.map((post) => ({
+    ...post,
+    status: post.status as "DRAFT" | "PUBLISHED",
+    publishedAt: post.publishedAt?.toISOString() ?? null,
+    createdAt: post.createdAt?.toISOString() ?? null,
+    updatedAt: post.updatedAt?.toISOString() ?? null
+  }));
 
   return (
-    <PageEditor
-      initialPage={page}
-      moduleLabel="Yazılar / Blog Yönetimi"
-      moduleDescription="Öne çıkan yazılar, podcast/video, yaklaşan etkinlikler, basın kiti ve içerik SEO alanlarını yönetin."
-    />
+    <div className="admin-content-stack">
+      <div className="admin-title-block">
+        <span>İçerik Yönetimi</span>
+        <h1>Yazılar / Blog</h1>
+        <p>Yazılar sayfasında görünen blog içeriklerini, detay sayfalarını ve SEO alanlarını yönetin.</p>
+      </div>
+      <BlogPostManager initialPosts={serializablePosts} />
+    </div>
   );
 }

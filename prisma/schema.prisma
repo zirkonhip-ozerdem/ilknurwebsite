@@ -61,6 +61,24 @@ model ContactSubmission {
   @@index([createdAt])
 }
 
+model BlogPost {
+  id             String     @id @default(cuid())
+  slug           String     @unique
+  title          String
+  excerpt        String?
+  content        String
+  category       String?
+  image          String?
+  seoTitle       String?
+  seoDescription String?
+  status         PageStatus @default(PUBLISHED)
+  publishedAt    DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([status, publishedAt])
+}
+
 model SiteSetting {
   key       String   @id
   value     Json

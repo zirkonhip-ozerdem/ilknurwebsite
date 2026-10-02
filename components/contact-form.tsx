@@ -41,13 +41,13 @@ export function ContactForm() {
       </label>
       <label>
         Konu
-        <select name="subject" defaultValue="Liderlik Danışmanlığı">
-          <option>Liderlik Danışmanlığı</option>
+        <select name="subject" defaultValue="Mentor Koçluk">
           <option>Mentor Koçluk</option>
           <option>Nefes Koçluğu</option>
-          <option>Kurumsal Eğitim</option>
           <option>Konuşmacı Talebi</option>
           <option>Basın ve Medya</option>
+          <option>Kamplar</option>
+          <option>Diğer</option>
         </select>
       </label>
       <label>
