@@ -12,6 +12,7 @@ type ImageUploadFieldProps = {
 
 export function ImageUploadField({ label, value, onChange, hint }: ImageUploadFieldProps) {
   const [status, setStatus] = useState<"idle" | "uploading" | "error">("idle");
+  const isUploadedImage = value?.startsWith("/uploads/");
 
   async function upload(file: File) {
     setStatus("uploading");
@@ -51,7 +52,7 @@ export function ImageUploadField({ label, value, onChange, hint }: ImageUploadFi
       <small>{hint ?? "Önerilen maksimum dosya boyutu: 8 MB. Önerilen banner ölçüsü: 2400x1200 px. Yüklenen tüm görseller WebP’ye çevrilir."}</small>
       {value && (
         <div className="admin-upload-preview">
-          <Image src={value} alt={`${label} önizleme`} width={640} height={320} />
+          <Image src={value} alt={`${label} önizleme`} width={640} height={320} unoptimized={isUploadedImage} />
           <button type="button" onClick={() => onChange("")}>
             Görseli Kaldır
           </button>

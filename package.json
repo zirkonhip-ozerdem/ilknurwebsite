@@ -14,7 +14,8 @@
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "db:seed": "prisma db seed",
-    "content:sync-homepage": "tsx prisma/sync-homepage-revision.ts"
+    "content:sync-homepage": "tsx prisma/sync-homepage-revision.ts",
+    "content:sync-page": "tsx prisma/sync-page.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",

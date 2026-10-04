@@ -79,6 +79,7 @@ export function PageEditor({ initialPage, moduleLabel, moduleDescription }: Page
   const [page, setPage] = useState<SitePage>(initialPage);
   const [activeIndex, setActiveIndex] = useState(0);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const activeSection = page.sections[activeIndex];
 
   const publicHref = useMemo(() => (page.slug === "anasayfa" ? "/" : `/${page.slug}`), [page.slug]);
@@ -149,6 +150,7 @@ export function PageEditor({ initialPage, moduleLabel, moduleDescription }: Page
 
   async function save() {
     setStatus("saving");
+    setErrorMessage(null);
     const response = await fetch(`/api/pages/${initialPage.slug}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -168,7 +170,14 @@ export function PageEditor({ initialPage, moduleLabel, moduleDescription }: Page
       })
     });
 
-    setStatus(response.ok ? "saved" : "error");
+    if (!response.ok) {
+      const body = (await response.json().catch(() => null)) as { message?: string } | null;
+      setErrorMessage(body?.message ?? "Kaydedilemedi. Veritabanı bağlantısını ve oturumu kontrol edin.");
+      setStatus("error");
+      return;
+    }
+
+    setStatus("saved");
   }
 
   return (
@@ -192,7 +201,7 @@ export function PageEditor({ initialPage, moduleLabel, moduleDescription }: Page
         </div>
       </header>
       {status === "saved" && <div className="admin-success">Sayfa kaydedildi.</div>}
-      {status === "error" && <div className="admin-warning">Kaydedilemedi. Veritabanı bağlantısını ve oturumu kontrol edin.</div>}
+      {status === "error" && <div className="admin-warning">{errorMessage}</div>}
       <section className="admin-editor-grid">
         <aside className="admin-panel admin-editor-sidebar">
           <div className="admin-section-heading compact-heading">

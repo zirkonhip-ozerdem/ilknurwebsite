@@ -53,6 +53,7 @@ export function BlogPostManager({ initialPosts }: BlogPostManagerProps) {
   const [selectedId, setSelectedId] = useState<string | "new">(initialPosts[0]?.id ?? "new");
   const [draft, setDraft] = useState<AdminBlogPost>(initialPosts[0] ?? emptyPost);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const selectedPost = useMemo(() => posts.find((post) => post.id === selectedId), [posts, selectedId]);
 
@@ -60,12 +61,14 @@ export function BlogPostManager({ initialPosts }: BlogPostManagerProps) {
     setSelectedId(post.id ?? "new");
     setDraft(post);
     setStatus("idle");
+    setErrorMessage(null);
   }
 
   function createPost() {
     setSelectedId("new");
     setDraft(emptyPost);
     setStatus("idle");
+    setErrorMessage(null);
   }
 
   function updateDraft(patch: Partial<AdminBlogPost>) {
@@ -74,6 +77,7 @@ export function BlogPostManager({ initialPosts }: BlogPostManagerProps) {
 
   async function savePost() {
     setStatus("saving");
+    setErrorMessage(null);
     const payload = {
       ...draft,
       slug: draft.slug || slugify(draft.title)
@@ -86,6 +90,8 @@ export function BlogPostManager({ initialPosts }: BlogPostManagerProps) {
     });
 
     if (!response.ok) {
+      const body = (await response.json().catch(() => null)) as { message?: string } | null;
+      setErrorMessage(body?.message ?? "Yazı kaydedilemedi. Lütfen alanları ve veritabanı bağlantısını kontrol edin.");
       setStatus("error");
       return;
     }
@@ -120,6 +126,8 @@ export function BlogPostManager({ initialPosts }: BlogPostManagerProps) {
     const response = await fetch(`/api/admin/blog-posts/${draft.id}`, { method: "DELETE" });
 
     if (!response.ok) {
+      const body = (await response.json().catch(() => null)) as { message?: string } | null;
+      setErrorMessage(body?.message ?? "Yazı silinemedi. Lütfen oturumu ve veritabanı bağlantısını kontrol edin.");
       setStatus("error");
       return;
     }
@@ -172,7 +180,7 @@ export function BlogPostManager({ initialPosts }: BlogPostManagerProps) {
         </div>
 
         {status === "saved" && <p className="admin-success compact">Yazı kaydedildi.</p>}
-        {status === "error" && <p className="admin-warning compact">Kaydedilemedi. Slug benzersiz olmalı ve veritabanı bağlantısı aktif olmalı.</p>}
+        {status === "error" && <p className="admin-warning compact">{errorMessage}</p>}
 
         <div className="admin-two-col">
           <label>

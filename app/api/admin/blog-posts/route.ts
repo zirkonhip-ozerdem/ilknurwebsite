@@ -1,4 +1,4 @@
-import { PageStatus } from "@prisma/client";
+import { PageStatus, Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { blogPostSchema } from "@/lib/blog-validation";
@@ -18,6 +18,12 @@ export async function POST(request: Request) {
   }
 
   try {
+    const slugOwner = await prisma.blogPost.findUnique({ where: { slug: parsed.data.slug } });
+
+    if (slugOwner) {
+      return NextResponse.json({ message: "Bu slug başka bir yazıda kullanılıyor." }, { status: 409 });
+    }
+
     const post = await prisma.blogPost.create({
       data: {
         ...parsed.data,
@@ -27,7 +33,12 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ post });
-  } catch {
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2021") {
+      return NextResponse.json({ message: "Blog tablosu bulunamadı. Lütfen Prisma migration çalıştırın." }, { status: 500 });
+    }
+
+    console.error("Blog post create failed", error);
     return NextResponse.json({ message: "Yazı kaydedilemedi." }, { status: 500 });
   }
 }

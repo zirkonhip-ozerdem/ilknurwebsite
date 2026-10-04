@@ -9,6 +9,10 @@ import { getBlogPostBySlug } from "@/lib/blog";
 
 export const dynamic = "force-dynamic";
 
+function isUploadedImage(src?: string | null) {
+  return Boolean(src?.startsWith("/uploads/"));
+}
+
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -51,7 +55,16 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
             {post.excerpt && <p>{post.excerpt}</p>}
           </header>
           <div className="blog-detail-image">
-            {post.image ? <Image src={post.image} alt={post.title} fill priority sizes="(max-width: 980px) 100vw, 920px" /> : null}
+            {post.image ? (
+              <Image
+                src={post.image}
+                alt={post.title}
+                fill
+                priority
+                sizes="(max-width: 980px) 100vw, 920px"
+                unoptimized={isUploadedImage(post.image)}
+              />
+            ) : null}
           </div>
           <div className="blog-detail-content">
             {paragraphs.map((paragraph) => (

@@ -85,9 +85,10 @@ export const defaultPages: SitePage[] = [
         type: "feature",
         eyebrow: "Eğitim Ekolojisi",
         title: "Medivisis Coaching School'un kurucusu olarak...",
-        body: "Medivisis’i, nefesin dönüştürücü gücünü profesyonel koçluk disipliniyle buluşturmak için kurdum.\n\nBurada hedefimiz; katılımcıların yalnızca bir sertifika alması değil, uygulama deneyimi kazanması, kendi mesleki duruşunu oluşturması ve nefes koçluğunu sürdürülebilir bir kariyere dönüştürebilmesidir.\n\nICF standartlarında yapılandırılmış eğitimler, uygulama süreçleri, mentorluk ve mezuniyet sonrası gelişim desteğiyle; geleceğin yetkin nefes koçlarını yetiştiriyoruz.",
+        body: "Uluslararası standartlarda koçluk eğitimi veren, insan liderliğini ve profesyonel dönüşümü yaygınlaştıran bir öğrenme topluluğu inşa ediyoruz.",
         ctaLabel: "Medivisis Eğitimlerini İncele",
         ctaHref: "/medivisis",
+        mediaUrl: "/assets/img/medivisis-anasayfa-kocluk.png",
         sortOrder: 4
       },
       {
@@ -299,16 +300,10 @@ export const defaultPages: SitePage[] = [
       },
       {
         type: "narrative",
-        eyebrow: "Kimler için?",
-        title: "Nefes koçluğunu profesyonel bir mesleğe dönüştürmek isteyenler için.",
-        body: "Medivisis Coaching School; nefes koçu olarak çalışmak, insanlara dönüşüm yolculuklarında eşlik etmek ve bu alanı profesyonel bir mesleğe dönüştürmek isteyenler içindir.",
+        title: "Kimler için?",
+        body: "Medivisis Coaching School; nefes koçu olarak çalışmak, insanlara dönüşüm yolculuklarında eşlik etmek ve bu alanı profesyonel bir mesleğe dönüştürmek isteyenler içindir.\n\nKoçlar, eğitmenler, danışmanlar, terapötik alanda çalışan profesyoneller ve yeni bir uzmanlık alanı oluşturmak isteyen herkes için; yapılandırılmış, uygulama odaklı bir gelişim alanı sunar.",
         sortOrder: 4,
-        items: [
-          {
-            title: "Gelişim Alanı",
-            text: "Koçlar, eğitmenler, danışmanlar, terapötik alanda çalışan profesyoneller ve yeni bir uzmanlık alanı oluşturmak isteyen herkes için; yapılandırılmış, uygulama odaklı bir gelişim alanı sunar."
-          }
-        ]
+        items: []
       },
       {
         type: "cta",

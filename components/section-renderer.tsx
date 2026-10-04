@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -28,6 +29,10 @@ const icons = {
   Sparkles,
   CalendarDays
 };
+
+function isUploadedImage(src?: string | null) {
+  return Boolean(src?.startsWith("/uploads/"));
+}
 
 function SectionHeading({ section, centered = false }: { section: SiteSection; centered?: boolean }) {
   return (
@@ -83,18 +88,20 @@ function HeroTitle({ title }: { title: string }) {
   );
 }
 
-function HeroSection({ section }: { section: SiteSection }) {
+function HeroSection({ section, pageSlug }: { section: SiteSection; pageSlug?: string }) {
   const paragraphs = section.body?.split("\n\n").filter(Boolean) ?? [];
+  const isMedivisisHero = pageSlug === "medivisis";
 
   return (
-    <section className="hero-section">
+    <section className={isMedivisisHero ? "hero-section medivisis-hero" : "hero-section"}>
       <div className="hero-copy">
         {section.eyebrow && <span className="eyebrow">{section.eyebrow}</span>}
         <HeroTitle title={section.title} />
         {section.subtitle && <p className="hero-subtitle">{section.subtitle}</p>}
-        {paragraphs.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
+        {!isMedivisisHero &&
+          paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         <div className="button-row">
           <SmartLink className="button button-dark" href={section.ctaHref}>
             {section.ctaLabel}
@@ -107,6 +114,22 @@ function HeroSection({ section }: { section: SiteSection }) {
         </div>
       </div>
       <PortraitFrame src={section.mediaUrl} />
+    </section>
+  );
+}
+
+function MedivisisHeroIntro({ section }: { section: SiteSection }) {
+  const paragraphs = section.body?.split("\n\n").filter(Boolean) ?? [];
+
+  if (paragraphs.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="medivisis-hero-intro">
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
     </section>
   );
 }
@@ -127,11 +150,15 @@ function StatsSection({ section }: { section: SiteSection }) {
   );
 }
 
-function CardsSection({ section }: { section: SiteSection }) {
-  const sectionId = section.eyebrow === "Hizmetler" ? "hizmetler" : section.eyebrow === "Yaklaşan Kamplar" ? "kamplar" : undefined;
+function CardsSection({ section, pageSlug }: { section: SiteSection; pageSlug?: string }) {
+  const sectionId =
+    section.eyebrow === "Hizmetler" ? "hizmetler" : section.eyebrow === "Yaklaşan Kamplar" ? "kamplar" : section.eyebrow === "Eğitimler" ? "egitimler" : undefined;
+  const isMedivisisMethodology =
+    pageSlug === "medivisis" &&
+    (section.items?.length === 4 || section.title === "Eğitim yaklaşımımız" || section.title === "Bugün Neler Yapıyoruz?");
 
   return (
-    <section className="section-container" id={sectionId}>
+    <section className={isMedivisisMethodology ? "section-container medivisis-methodology" : "section-container"} id={sectionId}>
       <div className="heading-with-action">
         <SectionHeading section={section} />
         <SmartLink href={section.ctaHref} className="text-link">
@@ -152,11 +179,15 @@ function CardsSection({ section }: { section: SiteSection }) {
 }
 
 function NarrativeSection({ section }: { section: SiteSection }) {
+  const paragraphs = section.body?.split("\n\n").filter(Boolean) ?? [];
+
   return (
     <section className="narrative-section">
       {section.eyebrow && <span className="eyebrow">{section.eyebrow}</span>}
       <h2>{section.title}</h2>
-      {section.body && <p>{section.body}</p>}
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
       <div className="narrative-copy">
         {section.items?.map((item) =>
           item.meta === "quote" ? (
@@ -187,12 +218,15 @@ function ManifestoSection({ section }: { section: SiteSection }) {
 
 function FeatureSection({ section }: { section: SiteSection }) {
   const paragraphs = section.body?.split("\n\n").filter(Boolean) ?? [];
+  const fallbackMedia =
+    section.title === "Medivisis Coaching School'un kurucusu olarak..." ? "/assets/img/medivisis-anasayfa-kocluk.png" : null;
+  const backgroundMedia = section.mediaUrl || fallbackMedia;
+  const hasBackgroundMedia = Boolean(backgroundMedia);
+  const style = hasBackgroundMedia ? ({ "--feature-bg": `url("${backgroundMedia}")` } as CSSProperties) : undefined;
 
   return (
-    <section className="feature-band" id={section.eyebrow === "Neden Medivisis?" ? "neden" : undefined}>
-      <div className="feature-media">
-        {section.mediaUrl && <Image src={section.mediaUrl} alt={section.title} fill sizes="(max-width: 980px) 100vw, 42vw" />}
-      </div>
+    <section className={hasBackgroundMedia ? "feature-band feature-band-image" : "feature-band"} id={section.eyebrow === "Neden Medivisis?" ? "neden" : undefined} style={style}>
+      {!hasBackgroundMedia && <div className="feature-media" />}
       <div className="feature-copy">
         {section.eyebrow && <span className="eyebrow">{section.eyebrow}</span>}
         <h2>{section.title}</h2>
@@ -238,7 +272,15 @@ async function ArticlesSection({ section }: { section: SiteSection }) {
         {articleItems.map((item, index) => (
           <article className="article-card" key={item.title}>
             <div className={`article-image article-image-${(index % 3) + 1}`}>
-              {item.image && <Image src={item.image} alt={item.title} fill sizes="(max-width: 760px) 100vw, 30vw" />}
+              {item.image && (
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 760px) 100vw, 30vw"
+                  unoptimized={isUploadedImage(item.image)}
+                />
+              )}
             </div>
             {item.meta && <span>{item.meta}</span>}
             <h3>{item.title}</h3>
@@ -398,9 +440,11 @@ async function ContactSection({ section }: { section: SiteSection }) {
   );
 }
 
-function CtaSection({ section }: { section: SiteSection }) {
+function CtaSection({ section, pageSlug }: { section: SiteSection; pageSlug?: string }) {
+  const isMedivisisFinal = pageSlug === "medivisis";
+
   return (
-    <section className="cta-section">
+    <section className={isMedivisisFinal ? "cta-section medivisis-final-cta" : "cta-section"}>
       <h2>{section.title}</h2>
       {section.body && <p>{section.body}</p>}
       <div className="button-row">
@@ -438,13 +482,18 @@ function LegalSection({ section }: { section: SiteSection }) {
   );
 }
 
-export async function SectionRenderer({ section }: { section: SiteSection; pageSlug: string }) {
+export async function SectionRenderer({ section, pageSlug }: { section: SiteSection; pageSlug: string }) {
   const renderers: Record<string, (section: SiteSection) => React.ReactNode | Promise<React.ReactNode>> = {
-    hero: (current) => <HeroSection section={current} />,
+    hero: (current) => (
+      <>
+        <HeroSection section={current} pageSlug={pageSlug} />
+        {pageSlug === "medivisis" && <MedivisisHeroIntro section={current} />}
+      </>
+    ),
     stats: (current) => <StatsSection section={current} />,
     narrative: (current) => <NarrativeSection section={current} />,
     manifesto: (current) => <ManifestoSection section={current} />,
-    cards: (current) => <CardsSection section={current} />,
+    cards: (current) => <CardsSection section={current} pageSlug={pageSlug} />,
     feature: (current) => <FeatureSection section={current} />,
     articles: (current) => ArticlesSection({ section: current }),
     testimonials: (current) => <TestimonialsSection section={current} />,
@@ -456,8 +505,8 @@ export async function SectionRenderer({ section }: { section: SiteSection; pageS
     newsletter: (current) => <NewsletterSection section={current} />,
     contact: (current) => <ContactSection section={current} />,
     legal: (current) => <LegalSection section={current} />,
-    cta: (current) => <CtaSection section={current} />
+    cta: (current) => <CtaSection section={current} pageSlug={pageSlug} />
   };
 
-  return (await renderers[section.type]?.(section)) ?? <CardsSection section={section} />;
+  return (await renderers[section.type]?.(section)) ?? <CardsSection section={section} pageSlug={pageSlug} />;
 }

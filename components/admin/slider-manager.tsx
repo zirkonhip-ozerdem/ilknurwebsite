@@ -9,6 +9,7 @@ export function SliderManager({ initialPages }: { initialPages: SitePage[] }) {
   const [pages, setPages] = useState(initialPages);
   const [savingSlug, setSavingSlug] = useState<string | null>(null);
   const [savedSlug, setSavedSlug] = useState<string | null>(null);
+  const [errorBySlug, setErrorBySlug] = useState<Record<string, string>>({});
 
   function updateHeroImage(slug: string, mediaUrl: string) {
     setPages((current) =>
@@ -25,6 +26,7 @@ export function SliderManager({ initialPages }: { initialPages: SitePage[] }) {
   async function savePage(page: SitePage) {
     setSavingSlug(page.slug);
     setSavedSlug(null);
+    setErrorBySlug((current) => ({ ...current, [page.slug]: "" }));
 
     const response = await fetch(`/api/pages/${page.slug}`, {
       method: "PUT",
@@ -48,7 +50,14 @@ export function SliderManager({ initialPages }: { initialPages: SitePage[] }) {
     setSavingSlug(null);
     if (response.ok) {
       setSavedSlug(page.slug);
+      return;
     }
+
+    const body = (await response.json().catch(() => null)) as { message?: string } | null;
+    setErrorBySlug((current) => ({
+      ...current,
+      [page.slug]: body?.message ?? "Banner kaydedilemedi. Veritabanı bağlantısını ve oturumu kontrol edin."
+    }));
   }
 
   return (
@@ -82,6 +91,7 @@ export function SliderManager({ initialPages }: { initialPages: SitePage[] }) {
               {savingSlug === page.slug ? "Kaydediliyor" : "Bannerı Kaydet"}
             </button>
             {savedSlug === page.slug && <div className="admin-success compact">Banner güncellendi.</div>}
+            {errorBySlug[page.slug] && <div className="admin-warning compact">{errorBySlug[page.slug]}</div>}
           </article>
         );
       })}
