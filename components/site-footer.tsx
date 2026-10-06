@@ -39,7 +39,7 @@ export async function SiteFooter() {
         </address>
         <div className="footer-logo-wrap">
           <Link href="/" className="brand-logo footer-logo" aria-label="İlknur Erdal Soydan anasayfa">
-            <Image src="/assets/img/medivisis-logo-yatay-web.png" alt={generalSettings.logoAlt} width={420} height={141} />
+            <Image src="/assets/img/ilknur-erdal-soydan-logopng.png" alt={generalSettings.logoAlt} width={420} height={175} />
           </Link>
         </div>
         <nav className="footer-links" aria-label="Footer bağlantıları">

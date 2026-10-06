@@ -17,10 +17,10 @@ export function SiteHeader() {
     <header className={isOpen ? "site-header menu-open" : "site-header"}>
       <Link href="/" className="brand-logo" aria-label="İlknur Erdal Soydan anasayfa">
         <Image
-          src="/assets/img/medivisis-logo-yatay-web.png"
-          alt="Medivisis Coaching School"
+          src="/assets/img/ilknur-erdal-soydan-logopng.png"
+          alt="İlknur Erdal Soydan"
           width={360}
-          height={121}
+          height={150}
           priority
         />
       </Link>

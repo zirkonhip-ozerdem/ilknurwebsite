@@ -57,7 +57,7 @@ export function AdminFrame({ children }: { children: React.ReactNode }) {
       <aside className={open ? "admin-sidebar-panel open" : "admin-sidebar-panel"}>
         <div className="admin-sidebar-head">
           <Link href="/admin" className="admin-brand" onClick={() => setOpen(false)}>
-            <Image src="/assets/img/medivisis-logo-yatay-web.png" alt="Medivisis Coaching School" width={210} height={70} />
+            <Image src="/assets/img/ilknur-erdal-soydan-logopng.png" alt="İlknur Erdal Soydan" width={210} height={88} />
           </Link>
           <button className="admin-close" type="button" onClick={() => setOpen(false)} aria-label="Menüyü kapat">
             <X size={20} />
